@@ -169,10 +169,12 @@ public class EmailServiceImpl implements EmailService {
     public void sendTransactionSuccessfulMessage(Transaction transaction) throws MessagingException {
 
         simpleMailMessage.setTo(transaction.getUser().getEmail());
-        simpleMailMessage.setSubject("Account Creation Successful");
+        simpleMailMessage.setSubject("Transaction Successful");
         simpleMailMessage.setFrom("salamikehinde345@gmail.com");
         String template = "Dear [[name]],\n"
                 + "Transaction Successful!\n"
+                + "You have successfully transfer " +transaction.getAmount() + " to " +transaction.getTargetOwnerName()
+                + " owner of the ID " + transaction.getTargetAccountId()
                 + "Thank you for using People's Bank.\n"
                 + "Bank team";
         template = template.replace("[[name]]", transaction.getUser().getFirstname());
@@ -188,17 +190,18 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendAlertReceivedMessage(Transaction transaction) throws MessagingException {
+    public void sendAlertReceivedMessage(Transaction transaction, String transactions,String transactionName) throws MessagingException {
 
         simpleMailMessage.setTo(transaction.getTargetEmail());
         simpleMailMessage.setSubject("Account Creation Successful");
         simpleMailMessage.setFrom("salamikehinde345@gmail.com");
         String template = "Dear [[name]],\n"
-                + "Thanks for registering on people bank.\n"
-                + "Congratulations! Your account has successfully being created\n"
+                +  "You have successfully received " +transaction.getAmount() + " from \n"
+                + transaction.getUser().getFirstname() + " the owner of the id " + transaction.getSourceAccountId()
+                + "Congratulations! Your account has successfully being credited\n"
                 + "Thank you.\n"
                 + "Bank team";
-        template = template.replace("[[name]]", "Client");
+        template = template.replace("[[name]]", transactionName);
 //            template = template.replace("[[code]]", token);
         simpleMailMessage.setText(template);
 

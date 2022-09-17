@@ -1,12 +1,15 @@
-package koredebank.example.bank.service;
+package koredebank.example.bank.service.userService;
 
 import koredebank.example.bank.dto.*;
+import koredebank.example.bank.model.UserAccount;
 import koredebank.example.bank.security.exceptions.AccountCreationException;
 import koredebank.example.bank.security.exceptions.AuthorizationException;
 import koredebank.example.bank.security.exceptions.GeneralServiceException;
 import koredebank.example.bank.security.exceptions.IncorrectPasswordException;
 
 import javax.mail.MessagingException;
+import java.util.List;
+import java.util.Optional;
 
 public interface UserServices {
 
@@ -31,4 +34,7 @@ public interface UserServices {
    boolean depositFunds(UserDepositsFundsRequestDto userDepositsFundsRequestDto,String authentication) throws AuthorizationException, GeneralServiceException, MessagingException;
 
    boolean withdrawFunds(UserWithdrawFundsRequestDto userWithdrawFundsRequestDto,String authentication) throws AuthorizationException, GeneralServiceException, MessagingException;
+
+//   Optional<UserAccount> listAccHistory(String authentication, int page,
+//                                        int size) throws GeneralServiceException, AuthorizationException;
 }

@@ -1,7 +1,7 @@
 package koredebank.example.bank.controller;
 
 import koredebank.example.bank.dto.*;
-import koredebank.example.bank.service.UserServices;
+import koredebank.example.bank.service.userService.UserServices;
 import koredebank.example.bank.util.ApiRoutes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +16,7 @@ public class UserController {
 
     @Autowired
     UserServices userServices;
+
 
 
     @PostMapping(ApiRoutes.User+"/validate")
@@ -128,4 +129,16 @@ public class UserController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
+
+//    @GetMapping(ApiRoutes.User+"/listAllAccHistory")
+//    public ResponseEntity<?> AccountHistory(@RequestHeader("Authorization")String authentication,@RequestParam(value = "page",defaultValue = "1") int page,
+//                                            @RequestParam(value = "size",defaultValue = "3") int size) throws GeneralServiceException {
+//        try {
+//            return new ResponseEntity<>(userServices.listAccHistory(authentication,page,size),HttpStatus.OK);
+//        }catch (Exception e){
+//            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
+
 }

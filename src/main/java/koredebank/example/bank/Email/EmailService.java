@@ -21,8 +21,10 @@ public interface EmailService {
 
    void sendTransactionSuccessfulMessage(Transaction transaction) throws MessagingException;
 
-   void sendAlertReceivedMessage(Transaction transaction) throws MessagingException;
+   void sendAlertReceivedMessage(Transaction transaction, String transactions,String transactionName) throws MessagingException;
 
    void sendDepositSuccessfulMessage(Optional<UserAccount> userAccount, UserDepositsFundsRequestDto userDepositsFundsRequestDto) throws MessagingException;
+
+
 }
 

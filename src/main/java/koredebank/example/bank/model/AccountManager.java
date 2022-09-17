@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 @Entity
-public class Admin implements Serializable {
+public class AccountManager implements Serializable {
     @Id
     private String id;
     @Column
@@ -38,7 +38,7 @@ public class Admin implements Serializable {
     }
 
     public void setRoles(Roles roles) {
-        this.roles = Roles.ADMIN;
+        this.roles = Roles.ACCOUNT_MANAGER;
     }
 
     public String getPassword() {

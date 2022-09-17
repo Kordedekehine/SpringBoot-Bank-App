@@ -1,11 +1,9 @@
-package koredebank.example.bank.service;
+package koredebank.example.bank.service.userService;
 
 import koredebank.example.bank.Email.EmailService;
 import koredebank.example.bank.dto.*;
 import koredebank.example.bank.model.*;
-import koredebank.example.bank.payload.TransferDto;
 import koredebank.example.bank.payload.UserAccountGeneratorDto;
-import koredebank.example.bank.payload.Validator;
 import koredebank.example.bank.repository.*;
 import koredebank.example.bank.security.exceptions.AccountCreationException;
 import koredebank.example.bank.security.exceptions.AuthorizationException;
@@ -23,12 +21,11 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
 @Service
-public class UserServiceImpl implements UserServices{
+public class UserServiceImpl implements UserServices {
 
     @Autowired
    private UserRepository userRepository;
@@ -297,8 +294,6 @@ public class UserServiceImpl implements UserServices{
 
         userAccountRepository.save(userAccount);
 
-
-
         UserCheckAccountBalanceResponseDto userCheckAccountBalanceResponseDto = new UserCheckAccountBalanceResponseDto();
 
         modelMapper.map(userCheckAccountBalanceRequestDto,userCheckAccountBalanceResponseDto);
@@ -348,6 +343,7 @@ public class UserServiceImpl implements UserServices{
                Usage.DEPOSIT);
 
        emailService.sendTransactionSuccessfulMessage(transaction);
+       emailService.sendAlertReceivedMessage(transaction, transaction.getTargetEmail(),transaction.getTargetOwnerName());
        transactionRepository.save(transaction);
        log.info(transaction.toString());
 
@@ -405,6 +401,24 @@ public class UserServiceImpl implements UserServices{
         return true;
     }
 
+//    @Override
+//    public Optional<UserAccount> listAccHistory(String authentication, int page,
+//                                                int size) throws GeneralServiceException, AuthorizationException {
+//
+//        String userEmail = userPrincipalService.getUserEmailAddressFromToken(authentication);
+//
+//        Pageable pageable = PageRequest.of((page - 1), size);
+//
+//        Page<UserAccount> userAccounts = userAccountRepository.findAll(pageable);
+//
+//        Optional<User> user = userRepository.findUserByEmail(userEmail);
+//        if (user.isEmpty()) {
+//            throw new AuthorizationException("User not found");
+//        }
+//        UserAccount userAccount = (UserAccount) userAccounts.getContent();
+//        return Optional.of(userAccount);
+//    }
+
 
     public UserAccount createAccounts(String bankName, String ownerName) {
         UserAccountGeneratorDto codeGenerator = new UserAccountGeneratorDto();
@@ -435,6 +449,8 @@ public class UserServiceImpl implements UserServices{
 
         return account.orElse(null);
     }
+
+
 
     public void updateAccountBalance(UserAccount account, double amount, Usage action) {
         if (action == Usage.WITHDRAW) {
