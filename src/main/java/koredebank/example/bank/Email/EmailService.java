@@ -2,6 +2,7 @@ package koredebank.example.bank.Email;
 
 
 import koredebank.example.bank.dto.UserDepositsFundsRequestDto;
+import koredebank.example.bank.model.CustomerCompliantForm;
 import koredebank.example.bank.model.Transaction;
 import koredebank.example.bank.model.User;
 import koredebank.example.bank.model.UserAccount;
@@ -24,6 +25,8 @@ public interface EmailService {
    void sendAlertReceivedMessage(Transaction transaction, String transactions,String transactionName) throws MessagingException;
 
    void sendDepositSuccessfulMessage(Optional<UserAccount> userAccount, UserDepositsFundsRequestDto userDepositsFundsRequestDto) throws MessagingException;
+
+   void sendCompliantNotification(CustomerCompliantForm customerCompliantForm) throws MessagingException;
 
 
 }

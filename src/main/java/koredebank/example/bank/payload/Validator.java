@@ -27,8 +27,6 @@ public class Validator {
 //    }
 
     public static boolean isSearchTransactionValid(TransferDto transferDto) {
-        // TODO Add checks for large amounts; consider past history of account holder and location of transfers
-
         if (!isSearchCriteriaValid(transferDto.getSourceAccount()))
             return false;
 

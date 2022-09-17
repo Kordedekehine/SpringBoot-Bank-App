@@ -20,7 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.util.Optional;
 
 @Slf4j
@@ -35,6 +35,9 @@ public class UserServiceImpl implements UserServices {
 
     @Autowired
     TransactionRepository transactionRepository;
+
+    @Autowired
+     CustomerCompliantFormRepository compliantFormRepository;
 
     @Autowired
    private ModelMapper modelMapper;
@@ -401,23 +404,48 @@ public class UserServiceImpl implements UserServices {
         return true;
     }
 
-//    @Override
-//    public Optional<UserAccount> listAccHistory(String authentication, int page,
-//                                                int size) throws GeneralServiceException, AuthorizationException {
-//
-//        String userEmail = userPrincipalService.getUserEmailAddressFromToken(authentication);
-//
-//        Pageable pageable = PageRequest.of((page - 1), size);
-//
-//        Page<UserAccount> userAccounts = userAccountRepository.findAll(pageable);
-//
-//        Optional<User> user = userRepository.findUserByEmail(userEmail);
-//        if (user.isEmpty()) {
-//            throw new AuthorizationException("User not found");
-//        }
-//        UserAccount userAccount = (UserAccount) userAccounts.getContent();
-//        return Optional.of(userAccount);
-//    }
+    @Override
+    public UserCompliantFormResponseDto usersCompliant(String loginToken,UserCompliantFormRequestDto userCompliantFormRequestDto) throws AuthorizationException, GeneralServiceException, MessagingException {
+
+
+        String userEmail=userPrincipalService.getUserEmailAddressFromToken(loginToken);
+
+       CustomerCompliantForm customerCompliantForm = new CustomerCompliantForm();
+
+        Optional<User> user = userRepository.findUserByEmail(userEmail);
+
+        modelMapper.map(userCompliantFormRequestDto,customerCompliantForm);
+
+        if(user.isEmpty()) {
+            throw new GeneralServiceException("Bank user must create an account before scheduling a section");
+        }
+         customerCompliantForm.setUser(user.get());
+
+         customerCompliantForm.setTitle(userCompliantFormRequestDto.getTitle());
+         customerCompliantForm.setDescription(userCompliantFormRequestDto.getDescription());
+         customerCompliantForm.setModeOfMeeting(userCompliantFormRequestDto.getModeOfMeeting());
+
+        ZoneId zone = ZoneId.of("Africa/Lagos");
+
+        Instant now = Instant.now(Clock.system(zone));
+       Instant expirationTime = now.plus(Duration.ofDays(userCompliantFormRequestDto.getCustomerCompliantDaysLength().getDays()))
+               .plus(Duration.ofHours(userCompliantFormRequestDto.getCustomerCompliantDaysLength().getHours()));
+
+       customerCompliantForm.setExpirationDate(expirationTime);
+
+       //email here
+        emailService.sendCompliantNotification(customerCompliantForm);
+
+       compliantFormRepository.save(customerCompliantForm);
+
+       UserCompliantFormResponseDto userCompliantFormResponseDto = new UserCompliantFormResponseDto();
+
+       modelMapper.map(userCompliantFormRequestDto,userCompliantFormResponseDto);
+
+       return userCompliantFormResponseDto;
+    }
+
+
 
 
     public UserAccount createAccounts(String bankName, String ownerName) {

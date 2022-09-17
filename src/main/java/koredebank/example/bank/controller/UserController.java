@@ -17,8 +17,6 @@ public class UserController {
     @Autowired
     UserServices userServices;
 
-
-
     @PostMapping(ApiRoutes.User+"/validate")
     public ResponseEntity<?> Registration(@RequestBody UserLoginValidationRequestDto userLoginValidationRequestDto){
         try{
@@ -130,15 +128,14 @@ public class UserController {
         }
     }
 
-//    @GetMapping(ApiRoutes.User+"/listAllAccHistory")
-//    public ResponseEntity<?> AccountHistory(@RequestHeader("Authorization")String authentication,@RequestParam(value = "page",defaultValue = "1") int page,
-//                                            @RequestParam(value = "size",defaultValue = "3") int size) throws GeneralServiceException {
-//        try {
-//            return new ResponseEntity<>(userServices.listAccHistory(authentication,page,size),HttpStatus.OK);
-//        }catch (Exception e){
-//            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-//        }
-//    }
 
+    @PostMapping(ApiRoutes.User+"/user-complaint")
+    public ResponseEntity<?> userComplain( @RequestHeader("Authorization")String authentication, @ModelAttribute UserCompliantFormRequestDto userCompliantFormRequestDto){
+        try{
+            return new ResponseEntity<>(userServices.usersCompliant(authentication,userCompliantFormRequestDto),HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }

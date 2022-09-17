@@ -35,6 +35,8 @@ public interface UserServices {
 
    boolean withdrawFunds(UserWithdrawFundsRequestDto userWithdrawFundsRequestDto,String authentication) throws AuthorizationException, GeneralServiceException, MessagingException;
 
+    UserCompliantFormResponseDto usersCompliant(String loginToken, UserCompliantFormRequestDto userCompliantFormRequestDto) throws AuthorizationException, GeneralServiceException, MessagingException;
+
 //   Optional<UserAccount> listAccHistory(String authentication, int page,
 //                                        int size) throws GeneralServiceException, AuthorizationException;
 }

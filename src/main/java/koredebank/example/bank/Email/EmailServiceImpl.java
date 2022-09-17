@@ -2,6 +2,7 @@ package koredebank.example.bank.Email;
 
 
 import koredebank.example.bank.dto.UserDepositsFundsRequestDto;
+import koredebank.example.bank.model.CustomerCompliantForm;
 import koredebank.example.bank.model.Transaction;
 import koredebank.example.bank.model.User;
 import koredebank.example.bank.model.UserAccount;
@@ -31,6 +32,8 @@ public class EmailServiceImpl implements EmailService {
     private final String  TRANSACTION_FAILURE = "Cannot send funds!";
 
     private final String DEPOSIT_FAILURE = "Fail to deposit Funds";
+
+    private final String SCHEDULE_NOT_SENT= "Schedule not sent! Kindly retry";
 
 
     public EmailServiceImpl(JavaMailSender javaMailSender) {
@@ -234,6 +237,29 @@ public class EmailServiceImpl implements EmailService {
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new MessagingException(String.format(DEPOSIT_FAILURE));
+        }
+    }
+
+    @Override
+    public void sendCompliantNotification(CustomerCompliantForm customerCompliantForm) throws MessagingException {
+
+        simpleMailMessage.setTo(customerCompliantForm.getUser().getEmail());
+        simpleMailMessage.setSubject("Account Creation Successful");
+        simpleMailMessage.setFrom("salamikehinde345@gmail.com");
+        String template = "Dear [[name]],\n"
+                + "You have successfully book a session with us\n"
+                + "Kindly show up before and after 30 minutes of the booked time \n"
+                + "Thank you.\n"
+                + "Bank team";
+        template = template.replace("[[name]]", customerCompliantForm.getUser().getFirstname());
+//            template = template.replace("[[code]]", token);
+        simpleMailMessage.setText(template);
+
+        try {
+            javaMailSender.send(simpleMailMessage);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            throw new MessagingException(String.format(SCHEDULE_NOT_SENT));
         }
     }
 }
