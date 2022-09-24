@@ -1,6 +1,7 @@
 package koredebank.example.bank.service.userService;
 
 import koredebank.example.bank.dto.*;
+import koredebank.example.bank.model.Transaction;
 import koredebank.example.bank.model.UserAccount;
 import koredebank.example.bank.security.exceptions.AccountCreationException;
 import koredebank.example.bank.security.exceptions.AuthorizationException;
@@ -37,6 +38,6 @@ public interface UserServices {
 
     UserCompliantFormResponseDto usersCompliant(String loginToken, UserCompliantFormRequestDto userCompliantFormRequestDto) throws AuthorizationException, GeneralServiceException, MessagingException;
 
-//   Optional<UserAccount> listAccHistory(String authentication, int page,
-//                                        int size) throws GeneralServiceException, AuthorizationException;
+   List<Transaction> getAllTransactionHistory(String loginToken) throws AuthorizationException, GeneralServiceException;
+
 }

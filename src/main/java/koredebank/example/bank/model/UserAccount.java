@@ -28,13 +28,14 @@ public class UserAccount {
 
     private String bankName;
 
+
     private String ownerName;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
-    private transient List<Transaction> transactions;
+    private List<Transaction> transactions;
 
     public UserAccount() {
 

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import java.time.*;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -445,7 +446,21 @@ public class UserServiceImpl implements UserServices {
        return userCompliantFormResponseDto;
     }
 
+    @Override
+    public List<Transaction> getAllTransactionHistory(String loginToken) throws AuthorizationException, GeneralServiceException {
 
+        String userEmail=userPrincipalService.getUserEmailAddressFromToken(loginToken);
+
+        Optional<User> user = userRepository.findUserByEmail(userEmail);
+
+        if(user.isEmpty()) {
+            throw new GeneralServiceException("Bank user must create an account before scheduling a section");
+        }
+
+        UserAccount userAccount = new UserAccount();
+
+      return userAccount.getTransactions();
+    }
 
 
     public UserAccount createAccounts(String bankName, String ownerName) {

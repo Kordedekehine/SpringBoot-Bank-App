@@ -138,4 +138,13 @@ public class UserController {
         }
     }
 
+    @PostMapping(ApiRoutes.User+"/transaction-history")
+    public ResponseEntity<?> transactionHistory( @RequestHeader("Authorization")String authentication){
+        try{
+            return new ResponseEntity<>(userServices.getAllTransactionHistory(authentication),HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }
