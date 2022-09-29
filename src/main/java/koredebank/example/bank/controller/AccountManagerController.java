@@ -1,9 +1,6 @@
 package koredebank.example.bank.controller;
 
-import koredebank.example.bank.dto.AccountManagerChangePassword;
-import koredebank.example.bank.dto.AccountManagerForgotPassword;
-import koredebank.example.bank.dto.AccountManagerSignUpRequestDto;
-import koredebank.example.bank.dto.AccountManagerSignUpResponseDto;
+import koredebank.example.bank.dto.*;
 import koredebank.example.bank.service.accountManagerService.AccountManagerServices;
 import koredebank.example.bank.util.ApiRoutes;
 import org.slf4j.Logger;
@@ -44,9 +41,8 @@ public class AccountManagerController {
         }
     }
 
-    @PostMapping(ApiRoutes.ACCOUNTMANAGER+ "/forgot-password")
-    public ResponseEntity<?> ForgotPassword(@RequestBody AccountManagerForgotPassword
-                                                    accountManagerForgotPassword) {
+    @PutMapping(ApiRoutes.ACCOUNTMANAGER+ "/forgot-password")
+    public ResponseEntity<?> ForgotPassword(@RequestBody AccountManagerForgotPassword accountManagerForgotPassword) {
         try {
             //starting point
             return new ResponseEntity<>(accountManagerServices.forgotAccountManagerPassword(accountManagerForgotPassword), HttpStatus.OK);
@@ -54,4 +50,25 @@ public class AccountManagerController {
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping(ApiRoutes.ACCOUNTMANAGER+ "/block-user")
+    public ResponseEntity<?> BlockUser(@RequestBody AccountManagerBlockUserRequestDto accountManagerBlockUserRequestDto) {
+        try {
+            //starting point
+            return new ResponseEntity<>(accountManagerServices.blockAccountUser(accountManagerBlockUserRequestDto), HttpStatus.OK);
+        } catch (Exception exception) {
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(ApiRoutes.ACCOUNTMANAGER+ "/unblock-user")
+    public ResponseEntity<?> UnBlockUser(@RequestBody AccountManagerUnblockUserRequestDto accountManagerUnblockUserRequestDto) {
+        try {
+            //starting point
+            return new ResponseEntity<>(accountManagerServices.unblockAccountUser(accountManagerUnblockUserRequestDto), HttpStatus.OK);
+        } catch (Exception exception) {
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

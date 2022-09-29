@@ -1,9 +1,12 @@
 package koredebank.example.bank.model;
 
 import koredebank.example.bank.model.audit.DateAudit;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,6 +43,12 @@ public class User extends DateAudit {
     @NotEmpty
     private String password;
 
+    @CreatedDate
+    private Instant createdAt;
+
+    @LastModifiedDate
+    private Instant updatedAt;
+
     @Transient
     private String confirmPassword;
     @Column
@@ -54,6 +63,25 @@ public class User extends DateAudit {
     @Column
     private String resetPasswordToken;
 
+    @Override
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    @Override
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @Override
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    @Override
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
     public String getId() {
         return id;

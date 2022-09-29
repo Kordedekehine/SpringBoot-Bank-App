@@ -5,6 +5,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -35,11 +36,14 @@ public class UserAccount {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private List<Transaction> transactions;
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn
+    private List<Transaction>transactionList=new ArrayList<>(); //paging or the normal conventional way
 
     public UserAccount() {
 
     }
+
     public UserAccount(String bankName, String ownerName, String generateSortCode, String generateAccountNumber, double currentBalance) {
         this.sortCode = generateSortCode;
         this.accountNumber = generateAccountNumber;
@@ -47,24 +51,23 @@ public class UserAccount {
         this.bankName = bankName;
         this.ownerName = ownerName;
     }
-    public UserAccount(long id, String sortCode, String accountNumber, double currentBalance, String bankName, String ownerName,int age) {
-        this.id = id;
-        this.sortCode = sortCode;
-        this.accountNumber = accountNumber;
-        this.currentBalance = currentBalance;
-        this.bankName = bankName;
-        this.ownerName = ownerName;
-    }
-
-    public UserAccount(long id, String sortCode, String accountNumber, double currentBalance, String bankName, String ownerName, List<Transaction> transactions,int age) {
-        this.id = id;
-        this.sortCode = sortCode;
-        this.accountNumber = accountNumber;
-        this.currentBalance = currentBalance;
-        this.bankName = bankName;
-        this.ownerName = ownerName;
-        this.transactions = transactions;
-    }
+//    public UserAccount(long id, String sortCode, String accountNumber, double currentBalance, String bankName, String ownerName,int age) {
+//        this.id = id;
+//        this.sortCode = sortCode;
+//        this.accountNumber = accountNumber;
+//        this.currentBalance = currentBalance;
+//        this.bankName = bankName;
+//        this.ownerName = ownerName;
+//    }
+//
+//    public UserAccount(long id, String sortCode, String accountNumber, double currentBalance, String bankName, String ownerName,int age) {
+//        this.id = id;
+//        this.sortCode = sortCode;
+//        this.accountNumber = accountNumber;
+//        this.currentBalance = currentBalance;
+//        this.bankName = bankName;
+//        this.ownerName = ownerName;
+//    }
 
 
 

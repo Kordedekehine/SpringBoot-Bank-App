@@ -17,7 +17,16 @@ public class UserTransferFundsRequestDto {
 
     private String reference;
 
+    private String targetEmail;
 
+
+    public String getTargetEmail() {
+        return targetEmail;
+    }
+
+    public void setTargetEmail(String targetEmail) {
+        this.targetEmail = targetEmail;
+    }
 
     public UserAccountDto getSourceAccount() {
         return sourceAccount;

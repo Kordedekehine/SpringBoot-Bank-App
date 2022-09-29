@@ -33,6 +33,8 @@ public class EmailServiceImpl implements EmailService {
 
     private final String DEPOSIT_FAILURE = "Fail to deposit Funds";
 
+    private final String WITHDRAW_FAILURE = "Fail to withdraw Funds";
+
     private final String SCHEDULE_NOT_SENT= "Schedule not sent! Kindly retry";
 
 
@@ -45,7 +47,7 @@ public class EmailServiceImpl implements EmailService {
         String link = "http://localhost:9090" + token;
 
         simpleMailMessage.setTo(userEmail.getEmail());
-        simpleMailMessage.setSubject("Account Activation");
+        simpleMailMessage.setSubject("Welcome To People's Bank");
         simpleMailMessage.setFrom("salamikehinde345@gmail.com");
         String template = "Dear [[name]],\n"
                 + "Thanks for registering on people bank.\n"
@@ -69,7 +71,7 @@ public class EmailServiceImpl implements EmailService {
     public void sendVerificationMessage(Optional<User> user) throws MessagingException {
 
         SimpleMailMessage message = new SimpleMailMessage();
-        simpleMailMessage.setText("Bank");
+        simpleMailMessage.setText("People's Bank");
         simpleMailMessage.setFrom("salamikehinde345@gmail.com");
         simpleMailMessage.setTo(user.get().getEmail());
         simpleMailMessage.setSubject("Welcome to people bank");
@@ -97,7 +99,6 @@ public class EmailServiceImpl implements EmailService {
 
         SimpleMailMessage message = new SimpleMailMessage();
         simpleMailMessage.setText("bank");
-        // simpleMailMessage.setFrom("abraham.ariyo@autox.africa");
         simpleMailMessage.setFrom("salamikehinde345@gmail.com");
         //simpleMailMessage.setTo(usersEntity.getEmail());
         simpleMailMessage.setTo(user.get().getEmail());
@@ -169,9 +170,9 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendTransactionSuccessfulMessage(Transaction transaction) throws MessagingException {
+    public void sendTransactionSuccessfulMessage(Transaction transaction,User user) throws MessagingException {
 
-        simpleMailMessage.setTo(transaction.getUser().getEmail());
+        simpleMailMessage.setTo(user.getEmail());
         simpleMailMessage.setSubject("Transaction Successful");
         simpleMailMessage.setFrom("salamikehinde345@gmail.com");
         String template = "Dear [[name]],\n"
@@ -193,10 +194,10 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendAlertReceivedMessage(Transaction transaction, String transactions,String transactionName) throws MessagingException {
+    public void sendAlertReceivedMessage(Transaction transaction) throws MessagingException {
 
         simpleMailMessage.setTo(transaction.getTargetEmail());
-        simpleMailMessage.setSubject("Account Creation Successful");
+        simpleMailMessage.setSubject("Alert Mail");
         simpleMailMessage.setFrom("salamikehinde345@gmail.com");
         String template = "Dear [[name]],\n"
                 +  "You have successfully received " +transaction.getAmount() + " from \n"
@@ -204,7 +205,7 @@ public class EmailServiceImpl implements EmailService {
                 + "Congratulations! Your account has successfully being credited\n"
                 + "Thank you.\n"
                 + "Bank team";
-        template = template.replace("[[name]]", transactionName);
+        template = template.replace("[[name]]", transaction.getTargetOwnerName());
 //            template = template.replace("[[code]]", token);
         simpleMailMessage.setText(template);
 
@@ -217,21 +218,19 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendDepositSuccessfulMessage(Optional<UserAccount> userAccount, UserDepositsFundsRequestDto userDepositsFundsRequestDto) throws MessagingException {
+    public void sendDepositSuccessfulMessage(User user,UserAccount userAccount) throws MessagingException {
 
-        simpleMailMessage.setTo(userAccount.get().getAccountEmail());
-        simpleMailMessage.setSubject("Account Creation Successful");
+        simpleMailMessage.setTo(user.getEmail());
+        simpleMailMessage.setSubject("Deposit Successful");
         simpleMailMessage.setFrom("salamikehinde345@gmail.com");
         String template = "Dear [[name]],\n"
-                + "You have successfully deposit the sum of\n"
-                + userDepositsFundsRequestDto.getAmount()
+                + "You have successfully deposit some funds into your account\n"
                 + "into Your account \n"
-                + "Thank you.\n"
+                + "Balance : " + userAccount.getCurrentBalance() + " \n"
+                + " Thank you.\n"
                 + "Bank team";
-        template = template.replace("[[name]]", userAccount.get().getOwnerName().toString());
-//            template = template.replace("[[code]]", token);
+        template = template.replace("[[name]]", userAccount.getOwnerName());
         simpleMailMessage.setText(template);
-
         try {
             javaMailSender.send(simpleMailMessage);
         } catch (Exception exception) {
@@ -241,10 +240,32 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
+    public void sendWithdrawSuccessfulMessage(User user, UserAccount userAccount) throws MessagingException {
+
+        simpleMailMessage.setTo(user.getEmail());
+        simpleMailMessage.setSubject("Withdraw Successful");
+        simpleMailMessage.setFrom("salamikehinde345@gmail.com");
+        String template = "Dear [[name]],\n"
+                + "You have successfully withdraw some funds into your account\n"
+                + "into Your account \n"
+                + "Balance : " + userAccount.getCurrentBalance() + " \n"
+                + " Thank you.\n"
+                + "Bank team";
+        template = template.replace("[[name]]", userAccount.getOwnerName());
+        simpleMailMessage.setText(template);
+        try {
+            javaMailSender.send(simpleMailMessage);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            throw new MessagingException(String.format(WITHDRAW_FAILURE));
+        }
+    }
+
+    @Override
     public void sendCompliantNotification(CustomerCompliantForm customerCompliantForm) throws MessagingException {
 
         simpleMailMessage.setTo(customerCompliantForm.getUser().getEmail());
-        simpleMailMessage.setSubject("Account Creation Successful");
+        simpleMailMessage.setSubject("Com[liant Request Successful");
         simpleMailMessage.setFrom("salamikehinde345@gmail.com");
         String template = "Dear [[name]],\n"
                 + "You have successfully book a session with us\n"
@@ -252,7 +273,6 @@ public class EmailServiceImpl implements EmailService {
                 + "Thank you.\n"
                 + "Bank team";
         template = template.replace("[[name]]", customerCompliantForm.getUser().getFirstname());
-//            template = template.replace("[[code]]", token);
         simpleMailMessage.setText(template);
 
         try {
@@ -262,4 +282,62 @@ public class EmailServiceImpl implements EmailService {
             throw new MessagingException(String.format(SCHEDULE_NOT_SENT));
         }
     }
+
+    @Override
+    public void sendAccountSuspendedNotification(User user) throws MessagingException {
+
+        simpleMailMessage.setTo(user.getEmail());
+        simpleMailMessage.setSubject("Account Suspension");
+        simpleMailMessage.setFrom("salamikehinde345@gmail.com");
+        String template = "Dear [[name]],\n"
+                + "Your account has been suspended till further notice! "
+                +"As your recent activities is not inline with our principles \n"
+                + "Thank you.\n"
+                + "Bank team";
+        template = template.replace("[[name]]", user.getFirstname());
+        simpleMailMessage.setText(template);
+
+        try {
+            javaMailSender.send(simpleMailMessage);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            throw new MessagingException(String.format(MESSAGE_NOT_SENT_MESSAGE));
+        }
+    }
+
+    @Override
+    public void sendAccountSuspendedRevertNotification(User user) throws MessagingException {
+
+        simpleMailMessage.setTo(user.getEmail());
+        simpleMailMessage.setSubject("Suspension Reversion");
+        simpleMailMessage.setFrom("salamikehinde345@gmail.com");
+        String template = "Dear [[name]],\n"
+                + "The suspension on your account has been reverted! "
+                +"Kindly stick to our rules and regulations to avoid such harsh judgement from henceforth\n"
+                + "Thank you.\n"
+                + "Bank team";
+        template = template.replace("[[name]]", user.getFirstname());
+        simpleMailMessage.setText(template);
+
+        try {
+            javaMailSender.send(simpleMailMessage);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            throw new MessagingException(String.format(MESSAGE_NOT_SENT_MESSAGE));
+        }
+    }
 }
+//Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYWxhbXRheWUwQGdtYWlsLmNvbSIsInJvbGVzIjoiQkFTRV9VU0VSIiwiaXNzIjoiQVVUT1giLCJpYXQiOjE2NjQ0Mzk3NzUsImV4cCI6MTY2NDUyNjE3NX0.Gcdeqks4I919OKvn9F16AbZWTlCpnFzn4bDP7X0Gw2VTHbdmc2kqZKgF6YISf-R7Rd8L9aj-S8sClkDbnQ7Exg
+
+//{
+//  "amount": 5000,
+//  "reference": "FOR UP KEEP",
+//  "sourceAccount": {
+//    "accountNumber": "53711468",
+//    "sortCode": "80-44-48"
+//  },
+//  "targetAccount": {
+//    "accountNumber": "90786649",
+//    "sortCode": "97-44-64"
+//  }
+//}

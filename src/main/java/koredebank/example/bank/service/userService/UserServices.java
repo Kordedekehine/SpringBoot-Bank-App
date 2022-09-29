@@ -40,4 +40,5 @@ public interface UserServices {
 
    List<Transaction> getAllTransactionHistory(String loginToken) throws AuthorizationException, GeneralServiceException;
 
+
 }

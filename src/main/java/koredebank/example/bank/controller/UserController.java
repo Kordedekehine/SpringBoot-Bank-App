@@ -61,8 +61,7 @@ public class UserController {
         }
     }
 
-
-    @PostMapping(ApiRoutes.User+"/change-password")
+    @PutMapping(ApiRoutes.User+"/change-password")
     public ResponseEntity<?> ChangePassword(@RequestHeader("Authorization")String authentication, @RequestBody UserChangePasswordRequestDto userChangePasswordRequestDto){
         try{
             return new ResponseEntity<>(userServices.userChangePassword(userChangePasswordRequestDto ,authentication),HttpStatus.OK);
@@ -83,7 +82,7 @@ public class UserController {
     }
 
     @PostMapping(ApiRoutes.User+"/create-account")
-    public ResponseEntity<?> createAccount( @RequestHeader("Authorization")String authentication, @RequestBody UserCreateAccountRequestDto userCreateBankAccountRequestDto){
+    public ResponseEntity<?> createAccount( @RequestHeader("Authorization")String authentication, @ModelAttribute UserCreateAccountRequestDto userCreateBankAccountRequestDto){
         try{
             return new ResponseEntity<>(userServices.createAccounts(userCreateBankAccountRequestDto,authentication),HttpStatus.OK);
         } catch (Exception e) {
@@ -99,7 +98,6 @@ public class UserController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
-
 
     @PostMapping(ApiRoutes.User+"/transfer-funds")
     public ResponseEntity<?> transferFunds( @RequestHeader("Authorization")String authentication, @RequestBody UserTransferFundsRequestDto userTransferFundsRequestDto){
@@ -138,7 +136,7 @@ public class UserController {
         }
     }
 
-    @PostMapping(ApiRoutes.User+"/transaction-history")
+    @GetMapping(ApiRoutes.User+"/transaction-history")
     public ResponseEntity<?> transactionHistory( @RequestHeader("Authorization")String authentication){
         try{
             return new ResponseEntity<>(userServices.getAllTransactionHistory(authentication),HttpStatus.OK);
@@ -146,5 +144,17 @@ public class UserController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
-
 }
+
+//{
+//  "id": "3ec85cd2-ee67-4d1a-9bd1-08248d7816b9",
+//  "firstName": "taiwo",
+//  "lastName": "yemisi",
+//  "phoneNumber": "07065435621",
+//  "email": "salamtaye0@gmail.com",
+//  "roles": "BASE_USER",
+//  "token": {
+//    "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYWxhbXRheWUwQGdtYWlsLmNvbSIsInJvbGVzIjoiQkFTRV9VU0VSIiwiaXNzIjoiQVVUT1giLCJpYXQiOjE2NjQ0Mzk3NzUsImV4cCI6MTY2NDUyNjE3NX0.Gcdeqks4I919OKvn9F16AbZWTlCpnFzn4bDP7X0Gw2VTHbdmc2kqZKgF6YISf-R7Rd8L9aj-S8sClkDbnQ7Exg",
+//    "tokenType": "BEARER_TOKEN"
+//  }
+//}

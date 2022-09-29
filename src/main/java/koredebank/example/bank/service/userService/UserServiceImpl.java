@@ -338,6 +338,7 @@ public class UserServiceImpl implements UserServices {
         transaction.setInitiationDate(LocalDateTime.now());
         transaction.setCompletionDate(LocalDateTime.now());
         transaction.setReference(userTransferFundsRequestDto.getReference());
+        transaction.setTargetEmail(userTransferFundsRequestDto.getTargetEmail());
         transaction.setUser(user.get());
 
        updateAccountBalance(sourceAccountNumberAndSortCode.get(),userTransferFundsRequestDto.getAmount(),
@@ -346,8 +347,9 @@ public class UserServiceImpl implements UserServices {
        updateAccountBalance(targetAccountNumberAndSortCode.get(),userTransferFundsRequestDto.getAmount(),
                Usage.DEPOSIT);
 
-       emailService.sendTransactionSuccessfulMessage(transaction);
-       emailService.sendAlertReceivedMessage(transaction, transaction.getTargetEmail(),transaction.getTargetOwnerName());
+       emailService.sendTransactionSuccessfulMessage(transaction,user.get());
+
+       emailService.sendAlertReceivedMessage(transaction);
        transactionRepository.save(transaction);
        log.info(transaction.toString());
 
@@ -375,7 +377,7 @@ public class UserServiceImpl implements UserServices {
 
         updateAccountBalance(account.get(),userDepositsFundsRequestDto.getAmount(),Usage.DEPOSIT);
 
-        emailService.sendDepositSuccessfulMessage(account,userDepositsFundsRequestDto);
+        emailService.sendDepositSuccessfulMessage(user.get(),account.get());
 
       return true;
     }
@@ -397,10 +399,10 @@ public class UserServiceImpl implements UserServices {
             throw new GeneralServiceException("Account does not exist");
         }
 
-
-
       isAmountAvailable(userWithdrawFundsRequestDto.getAmount(),account.getCurrentBalance());
         updateAccountBalance(account,userWithdrawFundsRequestDto.getAmount(), Usage.WITHDRAW);
+
+        emailService.sendWithdrawSuccessfulMessage(user.get(),account);
 
         return true;
     }
@@ -459,7 +461,7 @@ public class UserServiceImpl implements UserServices {
 
         UserAccount userAccount = new UserAccount();
 
-      return userAccount.getTransactions();
+      return userAccount.getTransactionList();
     }
 
 
@@ -475,7 +477,7 @@ public class UserServiceImpl implements UserServices {
                 .findBySortCodeAndAccountNumber(sortCode, accountNumber);
 
         account.ifPresent(value ->
-                value.setTransactions(transactionRepository
+                value.setTransactionList(transactionRepository
                         .findBySourceAccountIdOrderByInitiationDate(value.getId())));
 
        // return account.orElse(null);
@@ -533,6 +535,19 @@ public class UserServiceImpl implements UserServices {
 //  "roles": "BASE_USER",
 //  "token": {
 //    "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhYmR1bHNhbGFtZXN0aGVyMzQ1QGdtYWlsLmNvbSIsInJvbGVzIjoiQkFTRV9VU0VSIiwiaXNzIjoiQVVUT1giLCJpYXQiOjE2NjMzMjM5NjMsImV4cCI6MTY2MzQxMDM2M30.fP-MnZimsXG_Qo5mVctqHaqd2f8PRQxBwOo1nHHNFcokP4tq7crtPZ4HvQ2DTJJ-PN34krn_-fjujrSlfR1fbQ",
+//    "tokenType": "BEARER_TOKEN"
+//  }
+//}
+
+//{
+//  "id": "14bbd6f1-a6da-4c17-b6ea-4e048cee7559",
+//  "firstName": "esther",
+//  "lastName": "rukayat",
+//  "phoneNumber": "08076542133",
+//  "email": "abdulsalamesther345@gmail.com",
+//  "roles": "BASE_USER",
+//  "token": {
+//    "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhYmR1bHNhbGFtZXN0aGVyMzQ1QGdtYWlsLmNvbSIsInJvbGVzIjoiQkFTRV9VU0VSIiwiaXNzIjoiQVVUT1giLCJpYXQiOjE2NjQ0NDA5MzMsImV4cCI6MTY2NDUyNzMzM30.ji4BkBkvYUkDy5WTM22Z2ZrtjUz1e0mBQVMeudzTxy2noqEPsVRCbPbJA1yrXObngt4XDTtdbfOEI7kG6PqjaQ",
 //    "tokenType": "BEARER_TOKEN"
 //  }
 //}

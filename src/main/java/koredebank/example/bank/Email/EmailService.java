@@ -20,13 +20,19 @@ public interface EmailService {
 
     void sendAccountCreationSuccessfulEmail(UserAccount userAccount) throws MessagingException;
 
-   void sendTransactionSuccessfulMessage(Transaction transaction) throws MessagingException;
+   void sendTransactionSuccessfulMessage(Transaction transaction,User user) throws MessagingException;
 
-   void sendAlertReceivedMessage(Transaction transaction, String transactions,String transactionName) throws MessagingException;
+   void sendAlertReceivedMessage(Transaction transaction) throws MessagingException;
 
-   void sendDepositSuccessfulMessage(Optional<UserAccount> userAccount, UserDepositsFundsRequestDto userDepositsFundsRequestDto) throws MessagingException;
+   void sendDepositSuccessfulMessage(User user,UserAccount userAccount) throws MessagingException;
+
+    void sendWithdrawSuccessfulMessage(User user,UserAccount userAccount) throws MessagingException;
 
    void sendCompliantNotification(CustomerCompliantForm customerCompliantForm) throws MessagingException;
+
+   void sendAccountSuspendedNotification(User user) throws MessagingException;
+
+    void sendAccountSuspendedRevertNotification(User user) throws MessagingException;
 
 
 }
