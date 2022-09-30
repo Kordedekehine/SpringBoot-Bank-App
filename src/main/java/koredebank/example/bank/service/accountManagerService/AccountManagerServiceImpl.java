@@ -2,10 +2,7 @@ package koredebank.example.bank.service.accountManagerService;
 
 import koredebank.example.bank.Email.EmailService;
 import koredebank.example.bank.dto.*;
-import koredebank.example.bank.model.AccountManager;
-import koredebank.example.bank.model.Roles;
-import koredebank.example.bank.model.User;
-import koredebank.example.bank.model.UserAccount;
+import koredebank.example.bank.model.*;
 import koredebank.example.bank.repository.AccountManagerRepository;
 import koredebank.example.bank.repository.TransactionRepository;
 import koredebank.example.bank.repository.UserAccountRepository;
@@ -18,10 +15,15 @@ import koredebank.example.bank.serviceUtil.IdGenerator;
 import koredebank.example.bank.serviceUtil.StringUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -197,5 +199,69 @@ public class AccountManagerServiceImpl implements AccountManagerServices {
         if (!(accountManagerSignUpRequestDto.getConfirmPassword().equals(accountManagerSignUpRequestDto.getPassword()))) {
             throw new AccountCreationException("Passwords do not match");
         }
+    }
+
+
+    @Override
+    public TransactionListResponseDto listTransactions( int page, int size) throws AuthorizationException {
+
+        //create pageable
+        Pageable pageable= PageRequest.of((page-1),size);
+        //find all return page
+        Page<Transaction> transactions = transactionRepository.findAll(pageable);
+        //get total size of list
+        int totalSizeOfList=transactionRepository.findAll().size();
+        //get the contents from page
+        List<Transaction> transactionList= transactions.getContent();
+        //create a dto list for contents
+        List<TransactionResponseDto> transactionResponseDtoList= new ArrayList<>();
+
+        for (Transaction transaction: transactionList){
+
+            TransactionResponseDto transactionResponseDto = new TransactionResponseDto();
+            //map content to dtos
+            modelMapper.map(transaction,transactionResponseDto);
+            //add dto to dto list
+            transactionResponseDtoList.add(transactionResponseDto);
+        }
+        //create response object
+        TransactionListResponseDto transactionListResponseDto = new TransactionListResponseDto();
+        //set data into response object
+        transactionListResponseDto.setTransactionResponseDtoList(transactionResponseDtoList);
+        //set data into response object
+        transactionListResponseDto.setSizeOfList(totalSizeOfList);
+        //return response object
+        return transactionListResponseDto;
+    }
+
+    @Override
+    public AccountListResponseDto listUsersAccounts( int page, int size) throws AuthorizationException {
+
+        Pageable pageable= PageRequest.of((page-1),size);
+
+        Page<UserAccount> userAccounts = userAccountRepository.findAll(pageable);
+
+        int totalSizeOfList=userAccountRepository.findAll().size();
+
+        List<UserAccount> userAccountList= userAccounts.getContent();
+
+        List<AccountResponseDto> accountResponseDtoList= new ArrayList<>();
+
+        for (UserAccount userAccount: userAccountList){
+
+            AccountResponseDto accountResponseDto = new AccountResponseDto();
+
+            modelMapper.map(userAccount,accountResponseDto);
+
+            accountResponseDtoList.add(accountResponseDto);
+        }
+
+        AccountListResponseDto accountListResponseDto = new AccountListResponseDto();
+
+        accountListResponseDto.setAccountResponseDtoList(accountResponseDtoList);
+
+        accountListResponseDto.setSizeOfList(totalSizeOfList);
+
+        return accountListResponseDto;
     }
 }

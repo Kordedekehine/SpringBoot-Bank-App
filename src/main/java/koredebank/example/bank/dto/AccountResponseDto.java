@@ -1,27 +1,37 @@
 package koredebank.example.bank.dto;
 
+import javax.validation.constraints.Email;
+
 public class AccountResponseDto {
 
-    private String id;
+    private long id;
 
-    private String ownerName;
+    private String sortCode;
 
     private String accountNumber;
 
-    public String getId() {
+    private double currentBalance;
+
+    private String accountEmail;
+
+    private String bankName;
+
+    private String ownerName;
+
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getOwnerName() {
-        return ownerName;
+    public String getSortCode() {
+        return sortCode;
     }
 
-    public void setOwnerName(String ownerName) {
-        this.ownerName = ownerName;
+    public void setSortCode(String sortCode) {
+        this.sortCode = sortCode;
     }
 
     public String getAccountNumber() {
@@ -30,5 +40,37 @@ public class AccountResponseDto {
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    public double getCurrentBalance() {
+        return currentBalance;
+    }
+
+    public void setCurrentBalance(double currentBalance) {
+        this.currentBalance = currentBalance;
+    }
+
+    public String getAccountEmail() {
+        return accountEmail;
+    }
+
+    public void setAccountEmail(String accountEmail) {
+        this.accountEmail = accountEmail;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 }

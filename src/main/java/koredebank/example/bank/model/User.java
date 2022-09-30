@@ -57,6 +57,10 @@ public class User extends DateAudit {
     @JoinColumn
     private List<Transaction>transactionList=new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn
+    private List<UserAccount> userAccountsList=new ArrayList<>();
+
     @Column
     private Boolean locked=false;
 
@@ -184,5 +188,22 @@ public class User extends DateAudit {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+
+    public List<Transaction> getTransactionList() {
+        return transactionList;
+    }
+
+    public void setTransactionList(List<Transaction> transactionList) {
+        this.transactionList = transactionList;
+    }
+
+    public List<UserAccount> getUserAccountsList() {
+        return userAccountsList;
+    }
+
+    public void setUserAccountsList(List<UserAccount> userAccountsList) {
+        this.userAccountsList = userAccountsList;
     }
 }

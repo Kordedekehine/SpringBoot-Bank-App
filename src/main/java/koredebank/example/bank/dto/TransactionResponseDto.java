@@ -1,5 +1,7 @@
 package koredebank.example.bank.dto;
 
+import java.time.LocalDateTime;
+
 public class TransactionResponseDto {
 
     private long id;
@@ -14,6 +16,11 @@ public class TransactionResponseDto {
 
     private double amount;
 
+    private LocalDateTime initiationDate;
+
+    private LocalDateTime completionDate;
+
+    private String reference;
 
     public long getId() {
         return id;
@@ -61,5 +68,29 @@ public class TransactionResponseDto {
 
     public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+    public LocalDateTime getInitiationDate() {
+        return initiationDate;
+    }
+
+    public void setInitiationDate(LocalDateTime initiationDate) {
+        this.initiationDate = initiationDate;
+    }
+
+    public LocalDateTime getCompletionDate() {
+        return completionDate;
+    }
+
+    public void setCompletionDate(LocalDateTime completionDate) {
+        this.completionDate = completionDate;
+    }
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
     }
 }

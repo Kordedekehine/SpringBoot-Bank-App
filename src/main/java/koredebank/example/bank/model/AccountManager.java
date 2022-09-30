@@ -2,6 +2,8 @@ package koredebank.example.bank.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class AccountManager implements Serializable {
@@ -13,6 +15,14 @@ public class AccountManager implements Serializable {
     private Roles roles;
     @Column
     private String password;
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn
+    private List<Transaction> transactionList=new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn
+    private List<UserAccount> userAccountsList=new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -68,5 +78,22 @@ public class AccountManager implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+
+    public List<Transaction> getTransactionList() {
+        return transactionList;
+    }
+
+    public void setTransactionList(List<Transaction> transactionList) {
+        this.transactionList = transactionList;
+    }
+
+    public List<UserAccount> getUserAccountsList() {
+        return userAccountsList;
+    }
+
+    public void setUserAccountsList(List<UserAccount> userAccountsList) {
+        this.userAccountsList = userAccountsList;
     }
 }

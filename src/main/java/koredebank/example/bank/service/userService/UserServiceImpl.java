@@ -486,7 +486,6 @@ public class UserServiceImpl implements UserServices {
         return transactionListResponseDto;
     }
 
-
     public UserAccount createAccounts(String bankName, String ownerName) {
         UserAccountGeneratorDto codeGenerator = new UserAccountGeneratorDto();
         UserAccount newAccount = new UserAccount(bankName, ownerName, codeGenerator.generateSortCode(), codeGenerator.generateAccountNumber(), 0.00);

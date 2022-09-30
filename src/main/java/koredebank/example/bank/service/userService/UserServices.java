@@ -40,4 +40,5 @@ public interface UserServices {
 
     TransactionListResponseDto listTransactions(String loginToken, int page, int size) throws AuthorizationException;
 
+
 }

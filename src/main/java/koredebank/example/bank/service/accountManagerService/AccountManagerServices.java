@@ -19,5 +19,8 @@ public interface AccountManagerServices {
 
     boolean unblockAccountUser(AccountManagerUnblockUserRequestDto accountManagerUnblockUserRequestDto) throws GeneralServiceException, MessagingException;
 
+    TransactionListResponseDto listTransactions( int page, int size) throws AuthorizationException;
+
+    AccountListResponseDto listUsersAccounts( int page, int size) throws AuthorizationException;
 
 }
