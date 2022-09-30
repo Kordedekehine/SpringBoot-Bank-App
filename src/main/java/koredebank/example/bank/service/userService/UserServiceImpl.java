@@ -16,11 +16,15 @@ import koredebank.example.bank.serviceUtil.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import java.time.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -449,19 +453,37 @@ public class UserServiceImpl implements UserServices {
     }
 
     @Override
-    public List<Transaction> getAllTransactionHistory(String loginToken) throws AuthorizationException, GeneralServiceException {
+    public TransactionListResponseDto listTransactions(String loginToken, int page, int size) throws AuthorizationException {
 
-        String userEmail=userPrincipalService.getUserEmailAddressFromToken(loginToken);
+        //confirmUserToken
+        userPrincipalService.getUserEmailAddressFromToken(loginToken);
+        //create pageable
+        Pageable pageable= PageRequest.of((page-1),size);
+        //find all return page
+        Page<Transaction> transactions = transactionRepository.findAll(pageable);
+        //get total size of list
+        int totalSizeOfList=transactionRepository.findAll().size();
+        //get the contents from page
+        List<Transaction> transactionList= transactions.getContent();
+        //create a dto list for contents
+        List<TransactionResponseDto> transactionResponseDtoList= new ArrayList<>();
 
-        Optional<User> user = userRepository.findUserByEmail(userEmail);
+        for (Transaction transaction: transactionList){
 
-        if(user.isEmpty()) {
-            throw new GeneralServiceException("Bank user must create an account before scheduling a section");
+            TransactionResponseDto transactionResponseDto = new TransactionResponseDto();
+            //map content to dtos
+            modelMapper.map(transaction,transactionResponseDto);
+            //add dto to dto list
+            transactionResponseDtoList.add(transactionResponseDto);
         }
-
-        UserAccount userAccount = new UserAccount();
-
-      return userAccount.getTransactionList();
+        //create response object
+        TransactionListResponseDto transactionListResponseDto = new TransactionListResponseDto();
+        //set data into response object
+        transactionListResponseDto.setTransactionResponseDtoList(transactionResponseDtoList);
+        //set data into response object
+        transactionListResponseDto.setSizeOfList(totalSizeOfList);
+        //return response object
+        return transactionListResponseDto;
     }
 
 

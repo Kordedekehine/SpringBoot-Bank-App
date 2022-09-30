@@ -327,17 +327,15 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 }
-//Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYWxhbXRheWUwQGdtYWlsLmNvbSIsInJvbGVzIjoiQkFTRV9VU0VSIiwiaXNzIjoiQVVUT1giLCJpYXQiOjE2NjQ0Mzk3NzUsImV4cCI6MTY2NDUyNjE3NX0.Gcdeqks4I919OKvn9F16AbZWTlCpnFzn4bDP7X0Gw2VTHbdmc2kqZKgF6YISf-R7Rd8L9aj-S8sClkDbnQ7Exg
-
 //{
-//  "amount": 5000,
-//  "reference": "FOR UP KEEP",
-//  "sourceAccount": {
-//    "accountNumber": "53711468",
-//    "sortCode": "80-44-48"
-//  },
-//  "targetAccount": {
-//    "accountNumber": "90786649",
-//    "sortCode": "97-44-64"
+//  "id": "3ec85cd2-ee67-4d1a-9bd1-08248d7816b9",
+//  "firstName": "taiwo",
+//  "lastName": "yemisi",
+//  "phoneNumber": "07065435621",
+//  "email": "salamtaye0@gmail.com",
+//  "roles": "BASE_USER",
+//  "token": {
+//    "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYWxhbXRheWUwQGdtYWlsLmNvbSIsInJvbGVzIjoiQkFTRV9VU0VSIiwiaXNzIjoiQVVUT1giLCJpYXQiOjE2NjQ1MjgyMjgsImV4cCI6MTY2NDYxNDYyOH0.ZBPM1J-vPVWTMKBbjvgtAiVDmslbLjrKpFU8Vg5Sx7Fk-_12k5SHsAAo_iWhiMXtO-vm-vQvz9n_zShIRk0-4A",
+//    "tokenType": "BEARER_TOKEN"
 //  }
 //}

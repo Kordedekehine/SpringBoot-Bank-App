@@ -38,7 +38,6 @@ public interface UserServices {
 
     UserCompliantFormResponseDto usersCompliant(String loginToken, UserCompliantFormRequestDto userCompliantFormRequestDto) throws AuthorizationException, GeneralServiceException, MessagingException;
 
-   List<Transaction> getAllTransactionHistory(String loginToken) throws AuthorizationException, GeneralServiceException;
-
+    TransactionListResponseDto listTransactions(String loginToken, int page, int size) throws AuthorizationException;
 
 }

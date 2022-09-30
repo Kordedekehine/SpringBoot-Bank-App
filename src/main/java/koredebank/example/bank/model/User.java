@@ -9,6 +9,7 @@ import javax.validation.constraints.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -51,6 +52,11 @@ public class User extends DateAudit {
 
     @Transient
     private String confirmPassword;
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn
+    private List<Transaction>transactionList=new ArrayList<>();
+
     @Column
     private Boolean locked=false;
 

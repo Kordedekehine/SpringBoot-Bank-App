@@ -27,7 +27,6 @@ public class UserController {
         }
     }
 
-
     @PostMapping(ApiRoutes.User+"/signUp")
     public ResponseEntity<?> Registration(@RequestBody UserSignUpRequestDto userSignUpRequestDto){
         log.info(userSignUpRequestDto.toString());
@@ -38,7 +37,6 @@ public class UserController {
             return new ResponseEntity<>(exception.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
-
 
     @PostMapping(ApiRoutes.User+"/login")
     public ResponseEntity<?> SignIn(@RequestBody UserLoginDto userLoginDto){
@@ -136,14 +134,17 @@ public class UserController {
         }
     }
 
-    @GetMapping(ApiRoutes.User+"/transaction-history")
-    public ResponseEntity<?> transactionHistory( @RequestHeader("Authorization")String authentication){
-        try{
-            return new ResponseEntity<>(userServices.getAllTransactionHistory(authentication),HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+    @GetMapping(ApiRoutes.User+"/list-all-transactions")
+    public ResponseEntity<?> listAllTransactions(@RequestHeader("Authorization")String authentication,@RequestParam(value = "page",defaultValue = "1") int page,
+                                             @RequestParam(value = "size",defaultValue = "3") int size) {
+        try {
+
+            return new ResponseEntity<>(userServices.listTransactions(authentication,page,size), HttpStatus.OK);
+        } catch (Exception exception) {
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
 }
 
 //{

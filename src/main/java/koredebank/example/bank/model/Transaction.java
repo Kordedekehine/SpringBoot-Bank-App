@@ -40,7 +40,5 @@ public class Transaction {
 
     private String reference;
 
-
-
     // Add support for Bank charges, currency conversion, setup repeat payment/ standing order
 }
