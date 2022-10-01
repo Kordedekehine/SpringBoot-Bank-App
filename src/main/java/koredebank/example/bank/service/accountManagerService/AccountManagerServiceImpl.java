@@ -3,10 +3,7 @@ package koredebank.example.bank.service.accountManagerService;
 import koredebank.example.bank.Email.EmailService;
 import koredebank.example.bank.dto.*;
 import koredebank.example.bank.model.*;
-import koredebank.example.bank.repository.AccountManagerRepository;
-import koredebank.example.bank.repository.TransactionRepository;
-import koredebank.example.bank.repository.UserAccountRepository;
-import koredebank.example.bank.repository.UserRepository;
+import koredebank.example.bank.repository.*;
 import koredebank.example.bank.security.exceptions.AccountCreationException;
 import koredebank.example.bank.security.exceptions.AuthorizationException;
 import koredebank.example.bank.security.exceptions.GeneralServiceException;
@@ -34,6 +31,9 @@ public class AccountManagerServiceImpl implements AccountManagerServices {
 
     @Autowired
     private AccountManagerRepository accountManagerRepository;
+
+    @Autowired
+    CustomerCompliantFormRepository customerCompliantFormRepository;
 
     @Autowired
     TransactionRepository transactionRepository;
@@ -263,5 +263,36 @@ public class AccountManagerServiceImpl implements AccountManagerServices {
         accountListResponseDto.setSizeOfList(totalSizeOfList);
 
         return accountListResponseDto;
+    }
+
+    @Override
+    public UserCompliantListResponseDto listUserCompliantAndSchedules(int page, int size) throws AuthorizationException {
+
+        Pageable pageable= PageRequest.of((page-1),size);
+
+        Page<CustomerCompliantForm> customerCompliantForms = customerCompliantFormRepository.findAll(pageable);
+
+        int totalSizeOfList=customerCompliantFormRepository.findAll().size();
+
+        List<CustomerCompliantForm> customerCompliantFormList= customerCompliantForms.getContent();
+
+        List<UserCompliantFormResponseDto> userCompliantFormResponseDtoList= new ArrayList<>();
+
+        for (CustomerCompliantForm customerCompliantForm: customerCompliantFormList){
+
+            UserCompliantFormResponseDto userCompliantFormResponseDto = new UserCompliantFormResponseDto();
+
+            modelMapper.map(customerCompliantForm,userCompliantFormResponseDto);
+
+            userCompliantFormResponseDtoList.add(userCompliantFormResponseDto);
+        }
+
+        UserCompliantListResponseDto userCompliantListResponseDto = new UserCompliantListResponseDto();
+
+        userCompliantListResponseDto.setUserCompliantFormResponseDtoList(userCompliantFormResponseDtoList);
+
+        userCompliantListResponseDto.setSizeOfList(totalSizeOfList);
+
+        return userCompliantListResponseDto;
     }
 }

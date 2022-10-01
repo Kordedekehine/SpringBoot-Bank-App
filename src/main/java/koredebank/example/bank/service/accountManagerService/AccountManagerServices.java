@@ -23,4 +23,6 @@ public interface AccountManagerServices {
 
     AccountListResponseDto listUsersAccounts( int page, int size) throws AuthorizationException;
 
+    UserCompliantListResponseDto listUserCompliantAndSchedules(int page, int size) throws AuthorizationException;
+
 }

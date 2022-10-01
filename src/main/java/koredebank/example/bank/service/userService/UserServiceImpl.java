@@ -1,14 +1,12 @@
 package koredebank.example.bank.service.userService;
 
 import koredebank.example.bank.Email.EmailService;
+import koredebank.example.bank.cloudinaryService.CloudStorageService;
 import koredebank.example.bank.dto.*;
 import koredebank.example.bank.model.*;
 import koredebank.example.bank.payload.UserAccountGeneratorDto;
 import koredebank.example.bank.repository.*;
-import koredebank.example.bank.security.exceptions.AccountCreationException;
-import koredebank.example.bank.security.exceptions.AuthorizationException;
-import koredebank.example.bank.security.exceptions.GeneralServiceException;
-import koredebank.example.bank.security.exceptions.IncorrectPasswordException;
+import koredebank.example.bank.security.exceptions.*;
 import koredebank.example.bank.security.securityServices.UserPrincipalService;
 import koredebank.example.bank.security.securityUtils.JWTToken;
 import koredebank.example.bank.serviceUtil.IdGenerator;
@@ -21,12 +19,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
+import java.io.IOException;
 import java.time.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -46,6 +44,9 @@ public class UserServiceImpl implements UserServices {
 
     @Autowired
    private ModelMapper modelMapper;
+
+    @Autowired
+    CloudStorageService cloudStorageService;
 
     @Autowired
    private PasswordEncoder passwordEncoder;
@@ -412,8 +413,7 @@ public class UserServiceImpl implements UserServices {
     }
 
     @Override
-    public UserCompliantFormResponseDto usersCompliant(String loginToken,UserCompliantFormRequestDto userCompliantFormRequestDto) throws AuthorizationException, GeneralServiceException, MessagingException {
-
+    public UserCompliantFormResponseDto usersCompliant(String loginToken,UserCompliantFormRequestDto userCompliantFormRequestDto) throws AuthorizationException, GeneralServiceException, MessagingException, ImageUploadException {
 
         String userEmail=userPrincipalService.getUserEmailAddressFromToken(loginToken);
 
@@ -431,6 +431,9 @@ public class UserServiceImpl implements UserServices {
          customerCompliantForm.setTitle(userCompliantFormRequestDto.getTitle());
          customerCompliantForm.setDescription(userCompliantFormRequestDto.getDescription());
          customerCompliantForm.setModeOfMeeting(userCompliantFormRequestDto.getModeOfMeeting());
+         customerCompliantForm.setImage1(imageUrlFromCloudinary(userCompliantFormRequestDto.getImage1()));
+         customerCompliantForm.setImage2(imageUrlFromCloudinary(userCompliantFormRequestDto.getImage2()));
+         customerCompliantForm.setImage3(imageUrlFromCloudinary(userCompliantFormRequestDto.getImage3()));
 
         ZoneId zone = ZoneId.of("Africa/Lagos");
 
@@ -484,6 +487,28 @@ public class UserServiceImpl implements UserServices {
         transactionListResponseDto.setSizeOfList(totalSizeOfList);
         //return response object
         return transactionListResponseDto;
+    }
+
+    private String imageUrlFromCloudinary(MultipartFile image) throws ImageUploadException {
+        String imageUrl="";
+        if(image!=null && !image.isEmpty()){
+            Map<Object,Object> params=new HashMap<>();
+            params.put("public_id","Auto-X/"+extractFileName(image.getName()));
+            params.put("overwrite",true);
+
+            try{
+                Map<?,?> uploadResult = cloudStorageService.uploadImage(image,params);
+                imageUrl= String.valueOf(uploadResult.get("url"));
+            }catch (IOException e){
+                e.printStackTrace();
+                throw new ImageUploadException("Error uploading images,vehicle upload failed");
+            }
+        }
+        return imageUrl;
+    }
+
+    private String extractFileName(String fileName){
+        return fileName.split("\\.")[0];
     }
 
     public UserAccount createAccounts(String bankName, String ownerName) {

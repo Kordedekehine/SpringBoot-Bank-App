@@ -3,10 +3,7 @@ package koredebank.example.bank.service.userService;
 import koredebank.example.bank.dto.*;
 import koredebank.example.bank.model.Transaction;
 import koredebank.example.bank.model.UserAccount;
-import koredebank.example.bank.security.exceptions.AccountCreationException;
-import koredebank.example.bank.security.exceptions.AuthorizationException;
-import koredebank.example.bank.security.exceptions.GeneralServiceException;
-import koredebank.example.bank.security.exceptions.IncorrectPasswordException;
+import koredebank.example.bank.security.exceptions.*;
 
 import javax.mail.MessagingException;
 import java.util.List;
@@ -36,7 +33,7 @@ public interface UserServices {
 
    boolean withdrawFunds(UserWithdrawFundsRequestDto userWithdrawFundsRequestDto,String authentication) throws AuthorizationException, GeneralServiceException, MessagingException;
 
-    UserCompliantFormResponseDto usersCompliant(String loginToken, UserCompliantFormRequestDto userCompliantFormRequestDto) throws AuthorizationException, GeneralServiceException, MessagingException;
+    UserCompliantFormResponseDto usersCompliant(String loginToken, UserCompliantFormRequestDto userCompliantFormRequestDto) throws AuthorizationException, GeneralServiceException, MessagingException, ImageUploadException;
 
     TransactionListResponseDto listTransactions(String loginToken, int page, int size) throws AuthorizationException;
 

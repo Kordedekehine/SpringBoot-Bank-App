@@ -91,4 +91,13 @@ public class AccountManagerController {
         }
     }
 
+    @GetMapping(ApiRoutes.ACCOUNTMANAGER+"/list-all-usersComplain-Form")
+    public ResponseEntity<?> listAllUsersComplainForm(@RequestParam(value = "page",defaultValue = "1") int page, @RequestParam(value = "size",defaultValue = "3") int size) {
+        try {
+            return new ResponseEntity<>(accountManagerServices.listUserCompliantAndSchedules(page,size), HttpStatus.OK);
+        } catch (Exception exception) {
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

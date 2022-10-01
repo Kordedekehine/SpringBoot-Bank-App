@@ -24,6 +24,10 @@ public class AccountManager implements Serializable {
     @JoinColumn
     private List<UserAccount> userAccountsList=new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn
+    private List<CustomerCompliantForm> customerCompliantFormList = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -95,5 +99,14 @@ public class AccountManager implements Serializable {
 
     public void setUserAccountsList(List<UserAccount> userAccountsList) {
         this.userAccountsList = userAccountsList;
+    }
+
+
+    public List<CustomerCompliantForm> getCustomerCompliantFormList() {
+        return customerCompliantFormList;
+    }
+
+    public void setCustomerCompliantFormList(List<CustomerCompliantForm> customerCompliantFormList) {
+        this.customerCompliantFormList = customerCompliantFormList;
     }
 }
