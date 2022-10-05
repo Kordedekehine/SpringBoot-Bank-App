@@ -30,6 +30,7 @@ public class AccountManagerController {
         }
     }
 
+
     @PostMapping(ApiRoutes.ACCOUNTMANAGER+"/change-password")
     public ResponseEntity<?> ChangePassword(@RequestParam(name = "id") String id, @RequestBody AccountManagerChangePassword accountManagerChangePassword) {
         try {
@@ -75,7 +76,6 @@ public class AccountManagerController {
     public ResponseEntity<?> listAllTransactions(@RequestParam(value = "page",defaultValue = "1") int page,
                                                  @RequestParam(value = "size",defaultValue = "3") int size) {
         try {
-
             return new ResponseEntity<>(accountManagerServices.listTransactions(page,size), HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
@@ -99,5 +99,4 @@ public class AccountManagerController {
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
 }

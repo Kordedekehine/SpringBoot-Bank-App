@@ -57,14 +57,17 @@ public class UserServiceImpl implements UserServices {
     @Autowired
     UserPrincipalService userPrincipalService;
 
+
+    private static final String USER_NOT_FOUND = "User not found";
+
     @Override
     public UserLoginResponseDto login(UserLoginDto userLoginDto) throws IncorrectPasswordException, GeneralServiceException {
         UserLoginResponseDto userLoginResponseDto=new UserLoginResponseDto();
         JWTToken jwtToken= userPrincipalService.loginUser(userLoginDto);
         if(jwtToken!=null){
             Optional<User> usersEntity=userRepository.findUserByEmail(userLoginDto.getEmail());
-            if(usersEntity.isPresent()){
-                if(!usersEntity.get().getEnabled()){
+            if(usersEntity.isPresent()) {
+                if (!usersEntity.get().getEnabled()) {
                     throw new GeneralServiceException("User account has not been activated");
                 }
             }
@@ -106,7 +109,6 @@ public class UserServiceImpl implements UserServices {
                 usersEntity.get().setValidationToken(null);
 
                 log.info(usersEntity.get().getPassword());
-                System.out.println(usersEntity.get().getPassword());
                 emailService.sendVerificationMessage(usersEntity);
                 userRepository.save(usersEntity.get());
                 return true;
@@ -128,7 +130,7 @@ public class UserServiceImpl implements UserServices {
 
         Optional<User> user = userRepository.findUserByEmail(userEmail);
         if (user.isEmpty()) {
-            throw new GeneralServiceException("User not found");
+            throw new GeneralServiceException(USER_NOT_FOUND);
         }
 
         boolean matches = userPrincipalService.passwordMatches(
@@ -137,7 +139,6 @@ public class UserServiceImpl implements UserServices {
         if (!matches) {
             throw new GeneralServiceException("Old password is incorrect");
         }else
-
             user.get().setPassword(passwordEncoder.encode(userChangePasswordRequestDto.getNewPassword()));
 
         emailService.sendChangePasswordMessage(Optional.of(user.get()));
@@ -202,7 +203,7 @@ public class UserServiceImpl implements UserServices {
 
         Optional<User> user = userRepository.findUserByEmail(userEmail);
         if (user.isEmpty()) {
-            throw new AccountCreationException("User not found");
+            throw new AccountCreationException(USER_NOT_FOUND);
         }
 
         if (userCreateAccountRequestDto.getBankName() == null && userCreateAccountRequestDto.getOwnerName() == null) {
@@ -289,7 +290,7 @@ public class UserServiceImpl implements UserServices {
 
         Optional<User> user = userRepository.findUserByEmail(userEmail);
         if (user.isEmpty()) {
-            throw new AccountCreationException("User not found");
+            throw new AccountCreationException(USER_NOT_FOUND);
         }
 
       UserAccount userAccount = getAccountByDate(userCheckAccountBalanceRequestDto.getSortCode(),userCheckAccountBalanceRequestDto.getAccountNumber());
@@ -317,7 +318,7 @@ public class UserServiceImpl implements UserServices {
 
         Optional<User> user = userRepository.findUserByEmail(userEmail);
         if (user.isEmpty()) {
-            throw new AuthorizationException("User not found");
+            throw new AuthorizationException(USER_NOT_FOUND);
         }
 
 
@@ -329,17 +330,22 @@ public class UserServiceImpl implements UserServices {
                findBySortCodeAndAccountNumber(userTransferFundsRequestDto.getTargetAccount().getSortCode(),
                        userTransferFundsRequestDto.getTargetAccount().getAccountNumber());
 
-               if (sourceAccountNumberAndSortCode.isPresent() && targetAccountNumberAndSortCode.isPresent()){
-                 isAmountAvailable(userTransferFundsRequestDto.getAmount(),sourceAccountNumberAndSortCode.get()
-                         .getCurrentBalance());
+               if (sourceAccountNumberAndSortCode.isPresent() || !sourceAccountNumberAndSortCode.isEmpty()
+                       && targetAccountNumberAndSortCode.isPresent() || !targetAccountNumberAndSortCode.isEmpty()){
+                  throw new GeneralServiceException("source and target account number does not exist");
                }
+
+               UserAccount accountSourceNumAndCode = sourceAccountNumberAndSortCode.get();
+               UserAccount accountTargetNumAndCode = targetAccountNumberAndSortCode.get();
+
+        isAmountAvailable(userTransferFundsRequestDto.getAmount(), accountSourceNumAndCode.getCurrentBalance());
 
                Transaction transaction = new Transaction();
 
         transaction.setAmount(userTransferFundsRequestDto.getAmount());
-        transaction.setSourceAccountId(sourceAccountNumberAndSortCode.get().getId());
-        transaction.setTargetAccountId(targetAccountNumberAndSortCode.get().getId());
-        transaction.setTargetOwnerName(targetAccountNumberAndSortCode.get().getOwnerName());
+        transaction.setSourceAccountId(accountSourceNumAndCode.getId());
+        transaction.setTargetAccountId(accountTargetNumAndCode.getId());
+        transaction.setTargetOwnerName(accountTargetNumAndCode.getOwnerName());
         transaction.setInitiationDate(LocalDateTime.now());
         transaction.setCompletionDate(LocalDateTime.now());
         transaction.setReference(userTransferFundsRequestDto.getReference());
@@ -369,7 +375,7 @@ public class UserServiceImpl implements UserServices {
 
         Optional<User> user = userRepository.findUserByEmail(userEmail);
         if (user.isEmpty()) {
-            throw new AuthorizationException("User not found");
+            throw new AuthorizationException(USER_NOT_FOUND);
         }
 
 
@@ -394,7 +400,7 @@ public class UserServiceImpl implements UserServices {
 
         Optional<User> user = userRepository.findUserByEmail(userEmail);
         if (user.isEmpty()) {
-            throw new AuthorizationException("User not found");
+            throw new AuthorizationException(USER_NOT_FOUND);
         }
 
         UserAccount account = getAccountByDate(userWithdrawFundsRequestDto.getSortCode(),
@@ -493,7 +499,7 @@ public class UserServiceImpl implements UserServices {
         String imageUrl="";
         if(image!=null && !image.isEmpty()){
             Map<Object,Object> params=new HashMap<>();
-            params.put("public_id","Auto-X/"+extractFileName(image.getName()));
+            params.put("public_id","BANK/"+extractFileName(image.getName()));
             params.put("overwrite",true);
 
             try{
@@ -501,7 +507,7 @@ public class UserServiceImpl implements UserServices {
                 imageUrl= String.valueOf(uploadResult.get("url"));
             }catch (IOException e){
                 e.printStackTrace();
-                throw new ImageUploadException("Error uploading images,vehicle upload failed");
+                throw new ImageUploadException("Error uploading images,file upload failed");
             }
         }
         return imageUrl;
