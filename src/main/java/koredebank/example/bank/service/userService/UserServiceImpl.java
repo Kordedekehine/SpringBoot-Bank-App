@@ -321,7 +321,6 @@ public class UserServiceImpl implements UserServices {
             throw new AuthorizationException(USER_NOT_FOUND);
         }
 
-
         Optional<UserAccount> sourceAccountNumberAndSortCode = userAccountRepository.
                 findBySortCodeAndAccountNumber(userTransferFundsRequestDto.getSourceAccount().getSortCode(),
                         userTransferFundsRequestDto.getSourceAccount().getAccountNumber());
@@ -377,7 +376,6 @@ public class UserServiceImpl implements UserServices {
         if (user.isEmpty()) {
             throw new AuthorizationException(USER_NOT_FOUND);
         }
-
 
         Optional<UserAccount> account = userAccountRepository.findByAccountNumber
                 (userDepositsFundsRequestDto.getTargetAccountNo());
