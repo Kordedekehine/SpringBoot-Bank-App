@@ -44,3 +44,10 @@ Creation of Advanced Trades.
 Creation of Services.
 Consumption of Rest.
 Creation of APIs (Messaging, Email, Mapp,Authentication,Virtual Meet schedule)
+
+spring_profiles_active=prod
+PROD_DB_HOST=
+PROD_DB_PORT=
+PROD_DB_NAME=
+PROD_DB_PASSWORD=
+PROD_DB_USERNAME=
