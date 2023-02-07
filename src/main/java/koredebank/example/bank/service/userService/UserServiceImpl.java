@@ -352,7 +352,7 @@ public class UserServiceImpl implements UserServices {
         transaction.setUser(user.get());
 
        updateAccountBalance(sourceAccountNumberAndSortCode.get(),userTransferFundsRequestDto.getAmount(),
-              Usage.WITHDRAW);
+              Usage.TRANSFER);
 
        updateAccountBalance(targetAccountNumberAndSortCode.get(),userTransferFundsRequestDto.getAmount(),
                Usage.DEPOSIT);
@@ -548,7 +548,11 @@ public class UserServiceImpl implements UserServices {
 
 
     public void updateAccountBalance(UserAccount account, double amount, Usage action) {
-        if (action == Usage.WITHDRAW) {
+        if (action == Usage.TRANSFER){
+            account.setCurrentBalance(account.getCurrentBalance() - amount - 10);
+            //10 naira is the extra charges for the transfer
+        }
+       else if (action == Usage.WITHDRAW) {
             account.setCurrentBalance((account.getCurrentBalance() - amount));
         } else if (action == Usage.DEPOSIT) {
             account.setCurrentBalance((account.getCurrentBalance() + amount));

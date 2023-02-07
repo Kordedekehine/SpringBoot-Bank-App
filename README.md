@@ -51,3 +51,5 @@ PROD_DB_PORT=6832
 PROD_DB_NAME=railway
 PROD_DB_PASSWORD=kiz8wZQOdeDd87HQ9ZIT
 PROD_DB_USERNAME=root
+
+#https://springboot-bank-app-production.up.railway.app/swagger-ui.html#/
