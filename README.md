@@ -26,30 +26,40 @@ Replicate the basic functions of digital banking.
 The Basic API OF BANK
 
 Architecture and Design part:
+
 Creating Diagrams:
+
 Class
+
 Use cases
+
 Deployment
+
 Package
+
 To analyse
+
 Sequence
+
 Object
 
 SpringBoot Back-End part:
+
 Connection With The MySQL database through php myadmin.
+
 Creation of Entity tables.
+
 Creation of Relations Between Entity Tables.
+
 Creation of Crud (View, Delete, Add, Edit).
+
 Creation of Advanced Trades.
+
 Creation of Services.
+
 Consumption of Rest.
+
 Creation of APIs (Messaging, Email, Mapp,Authentication,Virtual Meet schedule)
 
-spring_profiles_active=prod
-PROD_DB_HOST=containers-us-west-72.railway.app
-PROD_DB_PORT=6832
-PROD_DB_NAME=railway
-PROD_DB_PASSWORD=kiz8wZQOdeDd87HQ9ZIT
-PROD_DB_USERNAME=root
 
 #https://springboot-bank-app-production.up.railway.app/swagger-ui.html#/
