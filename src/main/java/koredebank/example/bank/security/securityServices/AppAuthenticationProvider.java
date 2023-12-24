@@ -3,7 +3,7 @@ package koredebank.example.bank.security.securityServices;
 
 
 import koredebank.example.bank.model.Roles;
-import koredebank.example.bank.model.User;
+import koredebank.example.bank.model.UserEntity;
 import koredebank.example.bank.repository.UserRepository;
 import koredebank.example.bank.security.exceptions.AuthorizationException;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +39,7 @@ public class AppAuthenticationProvider implements AuthenticationManager {
 
 
 
-        Optional<User> user = userRepository.findUserByEmail(firstname);
+        Optional<UserEntity> user = userRepository.findUserByEmail(firstname);
 
         if (!user.isPresent()) {
             throw new BadCredentialsException("There is not account with given credentials");
@@ -48,7 +48,7 @@ public class AppAuthenticationProvider implements AuthenticationManager {
 //            throw new BadCredentialsException("Invalid username or password");
 //        }
 
-        User usersEntity=user.get();
+        UserEntity usersEntity=user.get();
         List<Roles> authorities = Collections.singletonList(usersEntity.getRoles());
         if(usersEntity.getRoles() == null) {
             try {

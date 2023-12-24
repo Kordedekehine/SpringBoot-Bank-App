@@ -3,7 +3,7 @@ package koredebank.example.bank.security.securityServices;
 
 
 import io.jsonwebtoken.Claims;
-import koredebank.example.bank.model.User;
+import koredebank.example.bank.model.UserEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +12,7 @@ import java.util.function.Function;
 
 
 public interface TokenProviderService {
-    String generateLoginToken(Authentication authentication, User user);
+    String generateLoginToken(Authentication authentication, UserEntity userEntity);
 
     String getEmailFromToken(String token);
 

@@ -7,14 +7,12 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
-public class User extends DateAudit {
+@Table
+public class UserEntity extends DateAudit {
 
     @Id
     private String id; //customise reader plans

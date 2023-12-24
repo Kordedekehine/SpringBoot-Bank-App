@@ -29,8 +29,8 @@ public class AccountManager implements Serializable {
     private List<CustomerCompliantForm> customerCompliantFormList = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "users_id")
+    private UserEntity userEntity;
 
     @ManyToOne
     @JoinColumn(name = "user_account_id")
@@ -44,12 +44,12 @@ public class AccountManager implements Serializable {
         this.userAccount = userAccount;
     }
 
-    public User getUser() {
-        return user;
+    public UserEntity getUser() {
+        return userEntity;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
     public String getId() {

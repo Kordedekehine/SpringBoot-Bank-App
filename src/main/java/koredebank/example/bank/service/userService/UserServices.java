@@ -23,19 +23,6 @@ public interface UserServices {
 
     boolean validateForgotTokenAndNewForgotPassword(UserRetrieveForgotPasswordRequestDto userRetrieveForgotPasswordRequestDto) throws GeneralServiceException, MessagingException, AuthorizationException;
 
-   UserCreateAccountResponseDto createAccounts(UserCreateAccountRequestDto userCreateAccountRequestDto,String authentication) throws AccountCreationException, AuthorizationException, MessagingException;
-
-    UserCheckAccountBalanceResponseDto checkAccBalance(UserCheckAccountBalanceRequestDto userCheckAccountBalanceRequestDto,String authentication) throws AccountCreationException, AuthorizationException, MessagingException, GeneralServiceException;
-
-    boolean transferFunds(UserTransferFundsRequestDto userTransferFundsRequestDto,String authentication) throws AuthorizationException, GeneralServiceException, MessagingException;
-
-   boolean depositFunds(UserDepositsFundsRequestDto userDepositsFundsRequestDto,String authentication) throws AuthorizationException, GeneralServiceException, MessagingException;
-
-   boolean withdrawFunds(UserWithdrawFundsRequestDto userWithdrawFundsRequestDto,String authentication) throws AuthorizationException, GeneralServiceException, MessagingException;
-
-    UserCompliantFormResponseDto usersCompliant(String loginToken, UserCompliantFormRequestDto userCompliantFormRequestDto) throws AuthorizationException, GeneralServiceException, MessagingException, ImageUploadException;
-
-    TransactionListResponseDto listTransactions(String loginToken, int page, int size) throws AuthorizationException;
 
 
 }

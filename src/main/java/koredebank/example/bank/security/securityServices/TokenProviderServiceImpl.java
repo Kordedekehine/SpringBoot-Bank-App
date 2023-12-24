@@ -3,7 +3,7 @@ package koredebank.example.bank.security.securityServices;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.SignatureException;
-import koredebank.example.bank.model.User;
+import koredebank.example.bank.model.UserEntity;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ import static koredebank.example.bank.security.securityUtils.SecurityConstants.*
 @Configuration
 public class TokenProviderServiceImpl implements Serializable, TokenProviderService {
     @Override
-    public String generateLoginToken(Authentication authentication, User user) {
+    public String generateLoginToken(Authentication authentication, UserEntity userEntity) {
 
         final String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)

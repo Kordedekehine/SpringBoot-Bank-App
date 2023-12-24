@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @ToString
 @Entity
-@Table(name = "account", schema = "people_bank")
+@Table(name = "account")
 public class UserAccount {
 
     @Id
@@ -33,8 +33,8 @@ public class UserAccount {
     private String ownerName;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "users_id")
+    private UserEntity userEntity;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn

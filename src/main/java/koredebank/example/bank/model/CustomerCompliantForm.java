@@ -35,8 +35,8 @@ public class CustomerCompliantForm {
     private String modeOfMeeting;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(columnDefinition = "user_compliant_id")
-    private User user;
+    @JoinColumn(columnDefinition = "users_compliant_id")
+    private UserEntity userEntity;
 
     public long getId() {
         return id;
@@ -78,12 +78,12 @@ public class CustomerCompliantForm {
         this.modeOfMeeting = modeOfMeeting;
     }
 
-    public User getUser() {
-        return user;
+    public UserEntity getUser() {
+        return userEntity;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
 

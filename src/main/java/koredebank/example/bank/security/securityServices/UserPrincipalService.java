@@ -2,7 +2,7 @@ package koredebank.example.bank.security.securityServices;
 
 
 import koredebank.example.bank.dto.UserLoginDto;
-import koredebank.example.bank.model.User;
+import koredebank.example.bank.model.UserEntity;
 import koredebank.example.bank.repository.UserRepository;
 import koredebank.example.bank.security.exceptions.AuthorizationException;
 import koredebank.example.bank.security.exceptions.GeneralServiceException;
@@ -38,18 +38,18 @@ public class UserPrincipalService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String firstname) throws UsernameNotFoundException {
 
-        Optional<User> optionalUser = userRepository.findUserByEmail(firstname);
+        Optional<UserEntity> optionalUser = userRepository.findUserByEmail(firstname);
         if(optionalUser.isEmpty()){
             throw new UsernameNotFoundException("User with given email not found");
         }
         else{
-            User user =  optionalUser.get();
-            return ApplicationUser.create(user);
+            UserEntity userEntity =  optionalUser.get();
+            return ApplicationUser.create(userEntity);
         }
     }
 
     public JWTToken loginUser(UserLoginDto userLoginDto) throws UsernameNotFoundException, IncorrectPasswordException, GeneralServiceException {
-        Optional<User> users = userRepository.findUserByEmail(userLoginDto.getEmail());
+        Optional<UserEntity> users = userRepository.findUserByEmail(userLoginDto.getEmail());
 
 
         if(users.isPresent()){
@@ -79,7 +79,7 @@ public class UserPrincipalService implements UserDetailsService {
 
     }
 
-    public String signUpUser(User users) {
+    public String signUpUser(UserEntity users) {
         StringBuilder stringBuilder= new StringBuilder("Validates ");
         boolean userExists=userRepository.findUserByEmail(users.getEmail()).isPresent();
         if(userExists){
@@ -94,13 +94,13 @@ public class UserPrincipalService implements UserDetailsService {
         return stringBuilder.toString();
     }
 
-    public String sendRegistrationToken(User usersEntity){
+    public String sendRegistrationToken(UserEntity usersEntity){
         //mailsender
         String token= UUID.randomUUID().toString().replace("-","").substring(0,6);
         return token;
     }
 
-    public String sendRecoveryToken(User users){
+    public String sendRecoveryToken(UserEntity users){
         //mailsender
         String token= UUID.randomUUID().toString().replace("-","").substring(0,6);
         return token;

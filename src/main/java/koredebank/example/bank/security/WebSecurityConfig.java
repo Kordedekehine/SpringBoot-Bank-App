@@ -17,9 +17,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/v1/bank","/api/v1/bank/***","/api/v1/bank/***","/api/v1/bank/user/***","/api/v1/bank/user/***/***")
+                .antMatchers("/api/v1/bank","/api/v1/bank/***","/api/v1/bank/***","/api/v1/bank/user/***","/api/v1/bank/user/***/***","/api/v1/transaction","/api/v1/transaction/***","/api/v1/transaction/***")
                 .permitAll()
-                .antMatchers("/swagger-ui/","/swagger-ui","/api/**", "/swagger-ui.html", "/swagger-ui/**","/webjars/**", "/v2/**", "/swagger-resources/**").permitAll()
+                .antMatchers("/swagger-ui/","/swagger-ui","/api/**", "/swagger-ui.html",  "/swagger-ui/index.html","/swagger-ui/**","/webjars/**", "/v2/**", "/swagger-resources/**").permitAll()
                 .anyRequest().permitAll();
     }
 }

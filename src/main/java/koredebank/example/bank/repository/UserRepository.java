@@ -1,21 +1,19 @@
 package koredebank.example.bank.repository;
 
-import koredebank.example.bank.model.User;
+import koredebank.example.bank.model.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
 import java.util.Optional;
 
-@Transactional
 @Repository
-public interface UserRepository extends JpaRepository<User,String> {
+public interface UserRepository extends JpaRepository<UserEntity,String> {
 
-    Optional<User> findUserByEmail(String email);
+    Optional<UserEntity> findUserByEmail(String email);
 
 
-    Optional<User> findUserEntitiesByEmail(String email);
-    Optional<User> findById(int userId);
+    Optional<UserEntity> findUserEntitiesByEmail(String email);
+
    // Optional<User> findUserByUsername(String username);
 
 }

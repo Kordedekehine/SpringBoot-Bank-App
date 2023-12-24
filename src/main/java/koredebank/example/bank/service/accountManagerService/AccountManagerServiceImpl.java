@@ -126,11 +126,11 @@ public class AccountManagerServiceImpl implements AccountManagerServices {
       if(user.isEmpty()){
           throw new GeneralServiceException("User cannot be found");
       }
-      user.get().getUser().setEnabled(false);
+      user.get().getUserEntity().setEnabled(false);
 
       userAccountRepository.save(user.get());
 
-      emailService.sendAccountSuspendedNotification(user.get().getUser());
+      emailService.sendAccountSuspendedNotification(user.get().getUserEntity());
 
       return true;
     }
@@ -147,11 +147,11 @@ public class AccountManagerServiceImpl implements AccountManagerServices {
         if(user.isEmpty()){
             throw new GeneralServiceException("User cannot be found");
         }
-        user.get().getUser().setEnabled(true);
+        user.get().getUserEntity().setEnabled(true);
 
         userAccountRepository.save(user.get());
 
-        emailService.sendAccountSuspendedRevertNotification(user.get().getUser());
+        emailService.sendAccountSuspendedRevertNotification(user.get().getUserEntity());
 
         return true;
     }

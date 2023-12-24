@@ -9,15 +9,14 @@ import java.time.LocalDateTime;
 
 
 @Entity
-@Table(name = "transaction", schema = "people_bank")
+@Table(name = "transaction")
 @Data
 @NoArgsConstructor
 @ToString
-@SequenceGenerator(name = "transaction_seq", sequenceName = "transaction_sequence", schema = "people_bank", initialValue = 5)
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
     private long sourceAccountId;
@@ -31,8 +30,8 @@ public class Transaction {
     private double amount;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "users_id")
+    private UserEntity userEntity;
 
     private LocalDateTime initiationDate;
 

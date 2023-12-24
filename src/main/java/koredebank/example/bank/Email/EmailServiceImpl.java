@@ -1,10 +1,9 @@
 package koredebank.example.bank.Email;
 
 
-import koredebank.example.bank.dto.UserDepositsFundsRequestDto;
 import koredebank.example.bank.model.CustomerCompliantForm;
 import koredebank.example.bank.model.Transaction;
-import koredebank.example.bank.model.User;
+import koredebank.example.bank.model.UserEntity;
 import koredebank.example.bank.model.UserAccount;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -43,10 +42,10 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendRegistrationSuccessfulEmail(User userEmail, String token) throws MessagingException {
+    public void sendRegistrationSuccessfulEmail(UserEntity userEntityEmail, String token) throws MessagingException {
         String link = "http://localhost:9090" + token;
 
-        simpleMailMessage.setTo(userEmail.getEmail());
+        simpleMailMessage.setTo(userEntityEmail.getEmail());
         simpleMailMessage.setSubject("Welcome To People's Bank");
         simpleMailMessage.setFrom("salamikehinde345@gmail.com");
         String template = "Dear [[name]],\n"
@@ -55,7 +54,7 @@ public class EmailServiceImpl implements EmailService {
                 + "[[code]]\n"
                 + "Thank you.\n"
                 + "Bank team";
-        template = template.replace("[[name]]", userEmail.getFirstname());
+        template = template.replace("[[name]]", userEntityEmail.getFirstname());
         template = template.replace("[[code]]", token);
         simpleMailMessage.setText(template);
 
@@ -68,7 +67,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendVerificationMessage(Optional<User> user) throws MessagingException {
+    public void sendVerificationMessage(Optional<UserEntity> user) throws MessagingException {
 
         SimpleMailMessage message = new SimpleMailMessage();
         simpleMailMessage.setText("People's Bank");
@@ -95,7 +94,7 @@ public class EmailServiceImpl implements EmailService {
 
 
     @Override
-    public void sendChangePasswordMessage(Optional<User> user) throws MessagingException {
+    public void sendChangePasswordMessage(Optional<UserEntity> user) throws MessagingException {
 
         SimpleMailMessage message = new SimpleMailMessage();
         simpleMailMessage.setText("bank");
@@ -124,9 +123,9 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendForgotPasswordMessage(User userEmail, String token) throws MessagingException {
+    public void sendForgotPasswordMessage(UserEntity userEntityEmail, String token) throws MessagingException {
         String link = "http://localhost:9090" + token;
-        simpleMailMessage.setTo(userEmail.getEmail());
+        simpleMailMessage.setTo(userEntityEmail.getEmail());
         simpleMailMessage.setSubject("Password Recovery");
         simpleMailMessage.setFrom("salamikehinde345@gmail.com");
         String template = "Dear [[name]],\n"
@@ -135,7 +134,7 @@ public class EmailServiceImpl implements EmailService {
                 + "[[code]]\n"
                 + "Thank you.\n"
                 + "Bank team";
-        template = template.replace("[[name]]", userEmail.getFirstname());
+        template = template.replace("[[name]]", userEntityEmail.getFirstname());
         template = template.replace("[[code]]", token);
         simpleMailMessage.setText(template);
 
@@ -149,7 +148,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendAccountCreationSuccessfulEmail(UserAccount userAccount) throws MessagingException {
-            simpleMailMessage.setTo(userAccount.getUser().getEmail());
+            simpleMailMessage.setTo(userAccount.getUserEntity().getEmail());
             simpleMailMessage.setSubject("Account Creation Successful");
             simpleMailMessage.setFrom("salamikehinde345@gmail.com");
             String template = "Dear [[name]],\n"
@@ -157,7 +156,7 @@ public class EmailServiceImpl implements EmailService {
                     + "Congratulations! Your account has successfully being created\n"
                     + "Thank you.\n"
                     + "Bank team";
-            template = template.replace("[[name]]", userAccount.getUser().getFirstname());
+            template = template.replace("[[name]]", userAccount.getUserEntity().getFirstname());
 //            template = template.replace("[[code]]", token);
             simpleMailMessage.setText(template);
 
@@ -170,9 +169,9 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendTransactionSuccessfulMessage(Transaction transaction,User user) throws MessagingException {
+    public void sendTransactionSuccessfulMessage(Transaction transaction, UserEntity userEntity) throws MessagingException {
 
-        simpleMailMessage.setTo(user.getEmail());
+        simpleMailMessage.setTo(userEntity.getEmail());
         simpleMailMessage.setSubject("Transaction Successful");
         simpleMailMessage.setFrom("salamikehinde345@gmail.com");
         String template = "Dear [[name]],\n"
@@ -181,7 +180,7 @@ public class EmailServiceImpl implements EmailService {
                 + " owner of the ID " + transaction.getTargetAccountId()
                 + "Thank you for using People's Bank.\n"
                 + "Bank team";
-        template = template.replace("[[name]]", transaction.getUser().getFirstname());
+        template = template.replace("[[name]]", transaction.getUserEntity().getFirstname());
 //            template = template.replace("[[code]]", token);
         simpleMailMessage.setText(template);
 
@@ -201,7 +200,7 @@ public class EmailServiceImpl implements EmailService {
         simpleMailMessage.setFrom("salamikehinde345@gmail.com");
         String template = "Dear [[name]],\n"
                 +  "You have successfully received " +transaction.getAmount() + " from \n"
-                + transaction.getUser().getFirstname() + " the owner of the id " + transaction.getSourceAccountId()
+                + transaction.getUserEntity().getFirstname() + " the owner of the id " + transaction.getSourceAccountId()
                 + "Congratulations! Your account has successfully being credited\n"
                 + "Thank you.\n"
                 + "Bank team";
@@ -218,9 +217,9 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendDepositSuccessfulMessage(User user,UserAccount userAccount) throws MessagingException {
+    public void sendDepositSuccessfulMessage(UserEntity userEntity, UserAccount userAccount) throws MessagingException {
 
-        simpleMailMessage.setTo(user.getEmail());
+        simpleMailMessage.setTo(userEntity.getEmail());
         simpleMailMessage.setSubject("Deposit Successful");
         simpleMailMessage.setFrom("salamikehinde345@gmail.com");
         String template = "Dear [[name]],\n"
@@ -240,9 +239,9 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendWithdrawSuccessfulMessage(User user, UserAccount userAccount) throws MessagingException {
+    public void sendWithdrawSuccessfulMessage(UserEntity userEntity, UserAccount userAccount) throws MessagingException {
 
-        simpleMailMessage.setTo(user.getEmail());
+        simpleMailMessage.setTo(userEntity.getEmail());
         simpleMailMessage.setSubject("Withdraw Successful");
         simpleMailMessage.setFrom("salamikehinde345@gmail.com");
         String template = "Dear [[name]],\n"
@@ -284,9 +283,9 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendAccountSuspendedNotification(User user) throws MessagingException {
+    public void sendAccountSuspendedNotification(UserEntity userEntity) throws MessagingException {
 
-        simpleMailMessage.setTo(user.getEmail());
+        simpleMailMessage.setTo(userEntity.getEmail());
         simpleMailMessage.setSubject("Account Suspension");
         simpleMailMessage.setFrom("salamikehinde345@gmail.com");
         String template = "Dear [[name]],\n"
@@ -294,7 +293,7 @@ public class EmailServiceImpl implements EmailService {
                 +"As your recent activities is not inline with our principles \n"
                 + "Thank you.\n"
                 + "Bank team";
-        template = template.replace("[[name]]", user.getFirstname());
+        template = template.replace("[[name]]", userEntity.getFirstname());
         simpleMailMessage.setText(template);
 
         try {
@@ -306,9 +305,9 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendAccountSuspendedRevertNotification(User user) throws MessagingException {
+    public void sendAccountSuspendedRevertNotification(UserEntity userEntity) throws MessagingException {
 
-        simpleMailMessage.setTo(user.getEmail());
+        simpleMailMessage.setTo(userEntity.getEmail());
         simpleMailMessage.setSubject("Suspension Reversion");
         simpleMailMessage.setFrom("salamikehinde345@gmail.com");
         String template = "Dear [[name]],\n"
@@ -316,7 +315,7 @@ public class EmailServiceImpl implements EmailService {
                 +"Kindly stick to our rules and regulations to avoid such harsh judgement from henceforth\n"
                 + "Thank you.\n"
                 + "Bank team";
-        template = template.replace("[[name]]", user.getFirstname());
+        template = template.replace("[[name]]", userEntity.getFirstname());
         simpleMailMessage.setText(template);
 
         try {

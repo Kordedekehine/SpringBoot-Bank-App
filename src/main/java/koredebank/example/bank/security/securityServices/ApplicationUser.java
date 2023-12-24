@@ -3,7 +3,7 @@ package koredebank.example.bank.security.securityServices;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import koredebank.example.bank.model.User;
+import koredebank.example.bank.model.UserEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,16 +37,16 @@ public class ApplicationUser implements UserDetails {
 
 
 
-    public static ApplicationUser create(User user) {
+    public static ApplicationUser create(UserEntity userEntity) {
         //user entity has no role. if you need a role, add field role
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(user.getRoles().toString())); //user entity does not have role. create one
+        authorities.add(new SimpleGrantedAuthority(userEntity.getRoles().toString())); //user entity does not have role. create one
         return new ApplicationUser(
-               String.valueOf( user.getId()),
-                user.getFirstname() + " " + user.getLastname(),
-                user.getEmail(),
-                user.getPassword(),
+               String.valueOf( userEntity.getId()),
+                userEntity.getFirstname() + " " + userEntity.getLastname(),
+                userEntity.getEmail(),
+                userEntity.getPassword(),
                 authorities
         );
     }

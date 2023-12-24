@@ -5,7 +5,7 @@ import lombok.ToString;
 @ToString
 public class UserSignUpRequestDto {
 
-    private String id;
+
     private String firstName;
 
     private String lastName;
